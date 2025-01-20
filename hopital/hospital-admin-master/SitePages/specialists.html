@@ -1,0 +1,412 @@
+<html>
+<head>
+<title>Admin</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="../SiteAssets/css/vendors/bootstrap.min.css"/>
+<link rel="stylesheet" href="../SiteAssets/css/vendors/line-awesome.min.css"/>
+<link rel="stylesheet" href="../SiteAssets/css/pages/layout.css"/>
+<link rel="icon" href="../../doclab-master/favicon.svg"/>
+<script src="../SiteAssets/js/vendors/jquery.min.js"></script>
+<script src="../SiteAssets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="../SiteAssets/js/global.js"></script>
+<link rel="stylesheet" href="../SiteAssets/css/pages/specialists.css"/>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <nav class="navbar navbar-expand-lg shadow-sm fixed-top">
+      <a class="navbar-brand" href="">
+        <img src="../../doclab-master/favicon.svg" alt="Doclab Logo"/>
+        <span>Doclab</span>
+      </a>
+      <div class="navbar-collapse">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="las la-question-circle"></i>
+            </a>
+          </li>
+          <li class="nav-item dropdown dropleft">
+            <a class="nav-link notification-dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="badge badge-pill badge-primary" style="float:right;margin-bottom:-10px;">3</span>
+              <i class="las la-bell"></i>
+            </a>
+            <div class="dropdown-menu notification-dropdown-menu shadow-lg" aria-labelledby="notification-dropdown">
+              <div class="dropdown-title">
+                <a href="#">Notifications <span class="ml-2 notifications-count">(3)</span></a>
+                <a class="float-right" href="#">Mark all as read</a>
+              </div>
+              <div class="dropdown-body">
+                <ul class="list-unstyled">
+                  <li class="media">
+                    <a class="notification-card" href="#">
+                      <img class="mr-3" src="../SiteAssets/images/inbox.svg" alt="Notification Icon"/>
+                      <div class="media-body">
+                        <h6 class="mt-0 mb-1">Collaboration tools available</h6>
+                        <p>Cras sit amet nibh libero, in gravida nulla.</p>
+                        <small class="text-muted">21.03.2020, 13:02</small>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- Repeat Notification Items as Needed -->
+                </ul>
+              </div>
+              
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link">
+              <span class="vertical-divider"></span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link profile-dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img class="rounded-circle" src="./admin.png" alt="Profile Picture"/>
+              <span class="d">Redoooxx</span>
+            </a>
+            <div class="dropdown">
+              <div class="dropdown-menu shadow-lg profile-dropdown-menu" aria-labelledby="profile-dropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="las la-user mr-2"></i>Profile
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="las la-cog mr-2"></i>Settings
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Main Content Section -->
+  <main>
+    <div class="side-nav">
+      <ul class="list-group list-group-flush">
+        <a class="list-group-item" href="dashboard.html" data-toggle="tooltip" data-placement="bottom" title="Dashboard">
+          <i class="las la-shapes la-lw"></i>
+          <span>Dashboard</span>
+        </a>
+        <a class="list-group-item" href="patients.html" data-toggle="tooltip" data-placement="bottom" title="Patien</a>ts">
+          <i class="las la-user-injured la-lw"></i>
+          <span>Patients</span>
+        </a>
+        <a class="list-group-item active" href="specialists.html" data-toggle="tooltip" data-placement="bottom" title="Specialists">
+          <i class="las la-clinic-medical la-lw"></i>
+          <span>Specialists</span>
+        </a>
+        <a class="list-group-item" href="procurement.html" data-toggle="tooltip" data-placement="bottom" title="Procurement">
+          <i class="las la-shopping-cart la-lw"></i>
+          <span>Procurement</span>
+        </a>
+        <a class="list-group-item" href="notifications.html" data-toggle="tooltip" data-placement="bottom" title="Staff">
+          <i class="las la-sms la-lw"></i>
+          <span>Staff</span>
+        </a>
+      </ul>
+    </div>
+    <div class="main-content">
+      <div class="container-fluid">
+      <div class="section title-section">
+        <h5 class="page-title">Specialists</h5>
+      </div>
+      <div class="section filters-section justify-content-between">
+        <div class="dropdowns-wrapper">
+        <div class="dropdown">
+          <a class="btn btn-dark-red-o dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">filter</a>
+          <div class="dropdown-menu shadow-lg" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" href="#">name</a>
+          <a class="dropdown-item" href="#">gender</a>
+          <a class="dropdown-item" href="#">specialization</a>
+          <a class="dropdown-item" href="#">email</a>
+          <a class="dropdown-item" href="#">phone no</a>
+          <a class="dropdown-item" href="#">address</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a class="btn btn-dark-red-o dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">sort by</a>
+          <div class="dropdown-menu shadow-lg" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" href="#">name</a>
+          <a class="dropdown-item" href="#">gender</a>
+          <a class="dropdown-item" href="#">specialization</a>
+          <a class="dropdown-item" href="#">email</a>
+          <a class="dropdown-item" href="#">phone no.</a>
+          <a class="dropdown-item" href="#">address</a>
+          </div>
+        </div>
+        </div>
+        <div class="buttons-wrapper">
+        <button class="btn btn-dark-red-f-gr" data-toggle="modal" data-target="#addSpecialistModal">
+          <i class="las la-plus-circle"></i>add a new specialist
+        </button>
+        </div>
+      </div>
+      <div class="section specialists-table-view">
+        <table class="table table-hover table-responsive-lg">
+        <thead>
+          <tr>
+          <th>name</th>
+          <th>gender</th>
+          <th>specialization</th>
+          <th>email</th>
+          <th>phone no.</th>
+          <th>address</th>
+          <th></th>
+          <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Specialists will be loaded here from IndexedDB -->
+        </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+    </main>
+    <footer>
+    <div class="page-footer text-center">
+      <div class="fixed-bottom shadow-sm">
+      <a href="https://covid19.who.int" target="_blank">
+        <img src="../SiteAssets/images/covid-19.svg"/>
+        <span>view COVID-19 info</span>
+      </a>
+      </div>
+    </div>
+    </footer>
+
+    <!-- Add Specialist Modal -->
+    <div class="modal fade" id="addSpecialistModal" tabindex="-1" role="dialog" aria-labelledby="addSpecialistModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addSpecialistModalLabel">Add New Specialist</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addSpecialistForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" required>
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <input type="text" class="form-control" id="gender" required>
+        </div>
+        <div class="form-group">
+          <label for="specialization">Specialization</label>
+          <input type="text" class="form-control" id="specialization" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone No.</label>
+          <input type="text" class="form-control" id="phone" required>
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" class="form-control" id="address" required>
+        </div>
+        <button type="submit" class="btn btn-dark-red-f">Add Specialist</button>
+        </form>
+      </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Edit Specialist Modal -->
+    <div class="modal fade" id="editSpecialistModal" tabindex="-1" role="dialog" aria-labelledby="editSpecialistModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSpecialistModalLabel">Edit Specialist</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editSpecialistForm">
+        <input type="hidden" id="editSpecialistId">
+        <div class="form-group">
+          <label for="editName">Name</label>
+          <input type="text" class="form-control" id="editName" required>
+        </div>
+        <div class="form-group">
+          <label for="editGender">Gender</label>
+          <input type="text" class="form-control" id="editGender" required>
+        </div>
+        <div class="form-group">
+          <label for="editSpecialization">Specialization</label>
+          <input type="text" class="form-control" id="editSpecialization" required>
+        </div>
+        <div class="form-group">
+          <label for="editEmail">Email</label>
+          <input type="email" class="form-control" id="editEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="editPhone">Phone No </label>
+          <input type="text" class="form-control" id="editPhone" required>
+        </div>
+        <div class="form-group">
+          <label for="editAddress">Address</label>
+          <input type="text" class="form-control" id="editAddress" required>
+        </div>
+        <button type="submit" class="btn btn-dark-red-f">Save Changes</button>
+        </form>
+      </div>
+      </div>
+    </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+      // Initialize IndexedDB
+      var db;
+      var request = indexedDB.open("SpecialistsDB", 1);
+
+      request.onerror = function(event) {
+      console.log("Error opening DB", event);
+      };
+
+      request.onsuccess = function(event) {
+      db = event.target.result;
+      loadSpecialists();
+      };
+
+      request.onupgradeneeded = function(event) {
+      db = event.target.result;
+      var objectStore = db.createObjectStore("specialists", { keyPath: "id", autoIncrement: true });
+      objectStore.createIndex("name", "name", { unique: false });
+      };
+
+      function loadSpecialists() {
+      var transaction = db.transaction(["specialists"], "readonly");
+      var objectStore = transaction.objectStore("specialists");
+      var request = objectStore.getAll();
+
+      request.onsuccess = function(event) {
+        var specialists = event.target.result;
+        specialists.forEach(function(specialist) {
+        addSpecialistToTable(specialist);
+        });
+      };
+      }
+
+      function addSpecialistToTable(specialist) {
+      var newRow = `<tr data-id="${specialist.id}">
+        <td><img class="rounded-circle mr-1" src="../SiteAssets/images/doctor (1).svg" loading="lazy"/><span class="ml-2">${specialist.name}</span></td>
+        <td class="text-muted">${specialist.gender}</td>
+        <td>${specialist.specialization}</td>
+        <td class="text-lowercase text-muted"><a href="">${specialist.email}</a></td>
+        <td>${specialist.phone}</td>
+        <td class="text-muted"><a href="">${specialist.address}</a></td>
+        <td>
+        <button class="btn btn-sm btn-dark-red-f">appointment</button>
+        <a href="" class="edit-specialist" data-toggle="modal" data-target="#editSpecialistModal"><i class="las la-edit"></i></a>
+        <a href="" class="delete-specialist"><i class="las la-trash"></i></a>
+        </td>
+      </tr>`;
+      $('table tbody').append(newRow);
+      }
+
+      $('#addSpecialistForm').submit(function(e) {
+      e.preventDefault();
+      var specialist = {
+        name: $('#name').val(),
+        gender: $('#gender').val(),
+        specialization: $('#specialization').val(),
+        email: $('#email').val(),
+        phone: $('#phone').val(),
+        address: $('#address').val()
+      };
+
+      var transaction = db.transaction(["specialists"], "readwrite");
+      var objectStore = transaction.objectStore("specialists");
+      var request = objectStore.add(specialist);
+
+      request.onsuccess = function(event) {
+        specialist.id = event.target.result;
+        addSpecialistToTable(specialist);
+        $('#addSpecialistModal').modal('hide');
+        $('#addSpecialistForm')[0].reset();
+      };
+      });
+
+      $(document).on('click', '.edit-specialist', function(e) {
+      e.preventDefault();
+      var row = $(this).closest('tr');
+      var id = row.data('id');
+
+      var transaction = db.transaction(["specialists"], "readonly");
+      var objectStore = transaction.objectStore("specialists");
+      var request = objectStore.get(id);
+
+      request.onsuccess = function(event) {
+        var specialist = event.target.result;
+        $('#editSpecialistId').val(specialist.id);
+        $('#editName').val(specialist.name);
+        $('#editGender').val(specialist.gender);
+        $('#editSpecialization').val(specialist.specialization);
+        $('#editEmail').val(specialist.email);
+        $('#editPhone').val(specialist.phone);
+        $('#editAddress').val(specialist.address);
+      };
+      });
+
+      $('#editSpecialistForm').submit(function(e) {
+      e.preventDefault();
+      var id = $('#editSpecialistId').val();
+      var specialist = {
+        id: Number(id),
+        name: $('#editName').val(),
+        gender: $('#editGender').val(),
+        specialization: $('#editSpecialization').val(),
+        email: $('#editEmail').val(),
+        phone: $('#editPhone').val(),
+        address: $('#editAddress').val()
+      };
+
+      var transaction = db.transaction(["specialists"], "readwrite");
+      var objectStore = transaction.objectStore("specialists");
+      var request = objectStore.put(specialist);
+
+      request.onsuccess = function(event) {
+        $('tr[data-id="' + id + '"]').replaceWith(`<tr data-id="${specialist.id}">
+        <td><img class="rounded-circle mr-1" src="../SiteAssets/images/doctor (1).svg" loading="lazy"/><span class="ml-2">${specialist.name}</span></td>
+        <td class="text-muted">${specialist.gender}</td>
+        <td>${specialist.specialization}</td>
+        <td class="text-lowercase text-muted"><a href="">${specialist.email}</a></td>
+        <td>${specialist.phone}</td>
+        <td class="text-muted"><a href="">${specialist.address}</a></td>
+        <td>
+          <button class="btn btn-sm btn-dark-red-f">appointment</button>
+          <a href="" class="edit-specialist" data-toggle="modal" data-target="#editSpecialistModal"><i class="las la-edit"></i></a>
+          <a href="" class="delete-specialist"><i class="las la-trash"></i></a>
+        </td>
+        </tr>`);
+        $('#editSpecialistModal').modal('hide');
+      };
+      });
+
+      $(document).on('click', '.delete-specialist', function(e) {
+      e.preventDefault();
+      if (confirm("Are you sure you want to delete this specialist?")) {
+        var row = $(this).closest('tr');
+        var id = row.data('id');
+
+        var transaction = db.transaction(["specialists"], "readwrite");
+        var objectStore = transaction.objectStore("specialists");
+        var request = objectStore.delete(id);
+
+        request.onsuccess = function(event) {
+        row.remove();
+        };
+      }
+      });
+    });
+    </script>

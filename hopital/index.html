@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Signup</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="../../doclab-master/favicon.svg"/>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div id="login-form" class="form">
+                <h2>Login</h2>
+                <label for="login-type">Login as:</label>
+                <select id="login-type">
+                    <option value="patient">Patient</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                <button onclick="login()">Login</button>
+                <p>Don't have an account? <a href="javascript:void(0)" onclick="showSignup()">Sign up</a></p>
+            </div>
+            <div id="signup-form" class="form hidden">
+                <h2>Sign Up</h2>
+                <label for="signup-type">Sign up as:</label>
+                <select id="signup-type">
+                    <option value="patient">Patient</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <input type="text" id="signup-username" placeholder="Username">
+                <input type="password" id="signup-password" placeholder="Password">
+                <button onclick="signup()">Sign Up</button>
+                <p>Already have an account? <a href="javascript:void(0)" onclick="showLogin()">Login</a></p>
+            </div>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

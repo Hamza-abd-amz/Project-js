@@ -1,0 +1,670 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <title>Admin</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- CSS Links -->
+  <link rel="stylesheet" href="../SiteAssets/css/vendors/bootstrap.min.css"/>
+  <link rel="stylesheet" href="../SiteAssets/css/vendors/line-awesome.min.css"/>
+  <link rel="stylesheet" href="../SiteAssets/css/pages/layout.css"/>
+  <link rel="stylesheet" href="../SiteAssets/css/pages/patients.css"/>
+  <link rel="icon" href="../../doclab-master/favicon.svg"/>
+  
+  <!-- JavaScript Links -->
+  <script src="../SiteAssets/js/vendors/jquery.min.js"></script>
+  <script src="../SiteAssets/js/vendors/bootstrap.bundle.min.js"></script>
+  <script src="../SiteAssets/js/global.js"></script>
+  <!-- Remove or ensure 'patients.js' does not conflict with inline script -->
+  <!-- <script src="../SiteAssets/js/patients.js"></script> -->
+  
+  <!-- Additional CSS for Add/Edit/Delete Functionalities -->
+  <style>
+    /* Edit and Remove Buttons */
+    .btn-dark-blue-o {
+      color: #17a2b8;
+      border: 1px solid #17a2b8;
+      background-color: transparent;
+    }
+    
+    .btn-dark-blue-o:hover {
+      color: #fff;
+      background-color: #17a2b8;
+    }
+    
+    .btn-dark-red-f {
+      color: #fff;
+      background-color: #dc3545;
+      border: 1px solid #dc3545;
+    }
+    
+    .btn-dark-red-f:hover {
+      background-color: #c82333;
+      border-color: #bd2130;
+    }
+
+
+    /* Ensure Modal Inputs Match Existing Design */
+    #patientModal .form-control {
+      border-radius: 0;
+      box-shadow: none;
+      border: 1px solid #ccc;
+      margin-bottom: 1em;
+    }
+
+    /* Label Styles for Table */
+    .label-orange,
+    .label-green,
+    .label-blue,
+    .label-pink,
+    .label-grey {
+      padding: 0.2em 0.5em;
+      border-radius: 3px;
+      font-size: 0.9em;
+      color: white;
+      display: inline-block;
+    }
+
+    .label-orange { background-color: #FFA500; }
+    .label-green { background-color: #28a745; }
+    .label-blue { background-color: #17a2b8; }
+    .label-pink { background-color: #e83e8c; }
+    .label-grey { background-color: #6c757d; }
+
+    /* Responsive Adjustments for Modal */
+    @media (max-width: 768px) {
+      #patientModal .modal-dialog {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <nav class="navbar navbar-expand-lg shadow-sm fixed-top">
+      <a class="navbar-brand" href="">
+        <img src="../../doclab-master/favicon.svg" alt="Doclab Logo"/>
+        <span>Doclab</span>
+      </a>
+      <div class="navbar-collapse">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="las la-question-circle"></i>
+            </a>
+          </li>
+          <li class="nav-item dropdown dropleft">
+            <a class="nav-link notification-dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="badge badge-pill badge-primary" style="float:right;margin-bottom:-10px;">3</span>
+              <i class="las la-bell"></i>
+            </a>
+            <div class="dropdown-menu notification-dropdown-menu shadow-lg" aria-labelledby="notification-dropdown">
+              <div class="dropdown-title">
+                <a href="#">Notifications <span class="ml-2 notifications-count">(3)</span></a>
+                <a class="float-right" href="#">Mark all as read</a>
+              </div>
+              <div class="dropdown-body">
+                <ul class="list-unstyled">
+                  <li class="media">
+                    <a class="notification-card" href="#">
+                      <img class="mr-3" src="../SiteAssets/images/inbox.svg" alt="Notification Icon"/>
+                      <div class="media-body">
+                        <h6 class="mt-0 mb-1">Collaboration tools available</h6>
+                        <p>Cras sit amet nibh libero, in gravida nulla.</p>
+                        <small class="text-muted">21.03.2020, 13:02</small>
+                      </div>
+                    </a>
+                  </li>
+                  <!-- Repeat Notification Items as Needed -->
+                </ul>
+              </div>
+              
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link">
+              <span class="vertical-divider"></span>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link profile-dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img class="rounded-circle" src="./admin.png" alt="Profile Picture"/>
+              <span class="d">Redoooxx</span>
+            </a>
+            <div class="dropdown">
+              <div class="dropdown-menu shadow-lg profile-dropdown-menu" aria-labelledby="profile-dropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="las la-user mr-2"></i>Profile
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="las la-cog mr-2"></i>Settings
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Main Content Section -->
+  <main>
+    <div class="side-nav">
+      <ul class="list-group list-group-flush">
+        <a class="list-group-item" href="dashboard.html" data-toggle="tooltip" data-placement="bottom" title="Dashboard">
+          <i class="las la-shapes la-lw"></i>
+          <span>Dashboard</span>
+        </a>
+        <a class="list-group-item active" href="patients.html" data-toggle="tooltip" data-placement="bottom" title="Patients">
+          <i class="las la-user-injured la-lw"></i>
+          <span>Patients</span>
+        </a>
+        <a class="list-group-item" href="specialists.html" data-toggle="tooltip" data-placement="bottom" title="Specialists">
+          <i class="las la-clinic-medical la-lw"></i>
+          <span>Specialists</span>
+        </a>
+        <a class="list-group-item" href="procurement.html" data-toggle="tooltip" data-placement="bottom" title="Procurement">
+          <i class="las la-shopping-cart la-lw"></i>
+          <span>Procurement</span>
+        </a>
+        <a class="list-group-item" href="notifications.html" data-toggle="tooltip" data-placement="bottom" title="Staff">
+          <i class="las la-sms la-lw"></i>
+          <span>Staff</span>
+        </a>
+        
+
+      </ul>
+    </div>
+    
+    <div class="main-content">
+      <div class="container-fluid">
+        <!-- Page Title Section -->
+        <div class="section title-section">
+          <h5 class="page-title">Patients</h5>
+        </div>
+        
+        <!-- Filters Section -->
+        <div class="section filters-section d-flex justify-content-between align-items-center">
+          <div class="dropdowns-wrapper">
+            <div class="dropdown">
+              <a class="btn btn-dark-red-o dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter</a>
+              <div class="dropdown-menu shadow-lg" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#">Age</a>
+                <a class="dropdown-item" href="#">Diagnosis</a>
+                <a class="dropdown-item" href="#">Maladie</a>
+              </div>
+            </div>
+            <div class="dropdown ml-2">
+              <a class="btn btn-dark-red-o dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort By</a>
+              <div class="dropdown-menu shadow-lg" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#">Patient ID</a>
+                <a class="dropdown-item" href="#">Patient Name</a>
+                <a class="dropdown-item" href="#">Age</a>
+                <a class="dropdown-item" href="#">Date of Birth</a>
+                <a class="dropdown-item" href="#">Diagnosis</a>
+                <a class="dropdown-item" href="#">Maladie</a>
+              </div>
+            </div>
+          </div>
+          <div class="switch-view-btns">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-darker-grey-o active">
+                <input id="card-view-btn" type="radio" name="options" checked=""/> <i class="las la-th-large"></i>
+              </label>
+              <label class="btn btn-darker-grey-o">
+                <input id="table-view-btn" type="radio" name="options"/> <i class="las la-list-ul"></i>
+              </label>
+            </div>
+          </div>
+          <div class="buttons-wrapper ml-auto">
+            <button class="btn btn-dark-red-f-gr" id="addPatientBtn">
+              <i class="las la-plus-circle"></i> Add a New Patient
+            </button>
+          </div>
+        </div>
+        
+        <!-- Patients Card View -->
+        <div class="section patients-card-view">
+          <div class="row" id="patients-container">
+            <!-- Patient Cards will be dynamically inserted here -->
+          </div>
+        </div>
+        
+        <!-- Patients Table View -->
+        <div class="section patients-table-view no-display">
+          <table class="table table-hover table-responsive-lg">
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Patient Name</th>
+                <th>Age</th>
+                <th>Date of Birth</th>
+                <th>Diagnosis</th>
+                <th>Maladie</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patients-table-body">
+              <!-- Patient Rows will be dynamically inserted here -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Add/Edit Patient Modal -->
+        <div class="modal fade" id="patientModal" tabindex="-1" role="dialog" aria-labelledby="patientModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <form id="patientForm">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="patientModalLabel">Add New Patient</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="las la-times-circle"></i>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <!-- Hidden Field for Patient ID (Used during Edit) -->
+                  <input type="hidden" id="patient-id" name="patient-id" />
+                  
+                  <!-- Patient Name -->
+                  <div class="form-group">
+                    <label for="patient-name">Patient Name</label>
+                    <input type="text" class="form-control" id="patient-name" name="patient-name" required />
+                  </div>
+                  
+                  <!-- Age -->
+                  <div class="form-group">
+                    <label for="patient-age">Age</label>
+                    <input type="number" class="form-control" id="patient-age" name="patient-age" required />
+                  </div>
+                  
+                  <!-- Date of Birth -->
+                  <div class="form-group">
+                    <label for="patient-dob">Date of Birth</label>
+                    <input type="date" class="form-control" id="patient-dob" name="patient-dob" required />
+                  </div>
+                  
+                  <!-- Diagnosis -->
+                  <div class="form-group">
+                    <label for="patient-diagnosis">Diagnosis</label>
+                    <select class="form-control" id="patient-diagnosis" name="patient-diagnosis" required>
+                      <option value="">Select Diagnosis</option>
+                      <option value="urgent">Urgent</option>
+                      <option value="non urgent">Non Urgent</option>
+                      <option value="resuscitation">Resuscitation</option>
+                      <option value="emergency">Emergency</option>
+                    </select>
+                  </div>
+                  
+                  <!-- Maladie -->
+                  <div class="form-group">
+                    <label for="patient-maladie">Maladie</label>
+                    <select class="form-control" id="patient-maladie" name="patient-maladie" required>
+                      <option value="">Select Maladie</option>
+                      <option value="Diabète">Diabète</option>
+                      <option value="Hypertension">Hypertension</option>
+                      <option value="Asthme">Asthme</option>
+                      <option value="Rhume">Rhume</option>
+                      <option value="Grippe">Grippe</option>
+                      <option value="Bronchite">Bronchite</option>
+                      <option value="Pneumonie">Pneumonie</option>
+                      <option value="Allergies">Allergies</option>
+                      <option value="Migraine">Migraine</option>
+                      <option value="Cancer">Cancer</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-dark-red-o" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-dark-red-f-gr">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+    
+    <!-- Onboarding Modal (Existing) -->
+    <div class="modal onboarding-modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Welcome</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <i class="las la-times-circle"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="carousel slide" id="carouselExampleCaptions" data-ride="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img class="d-block" src="../SiteAssets/images/undraw_dashboard_nklg.svg" alt="Dashboard"/>
+                  <div class="carousel-caption d-md-block">
+                    <p>Intuitive <a href="" data-dismiss="modal">Dashboard <i class="las la-external-link-alt"></i></a></p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img class="d-block" src="../SiteAssets/images/undraw_medicine_b1ol.svg" alt="Specialists"/>
+                  <div class="carousel-caption d-md-block">
+                    <p>Access to <a href="specialists.html">Specialists <i class="las la-external-link-alt"></i></a></p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img class="d-block" src="../SiteAssets/images/undraw_receipt_ecdd.svg" alt="Procurement"/>
+                  <div class="carousel-caption d-md-block">
+                    <p>Simple <a href="procurement.html">Procurement <i class="las la-external-link-alt"></i></a> Process</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img class="d-block" src="../SiteAssets/images/undraw_new_notifications_fhvw.svg" alt="Notifications"/>
+                  <div class="carousel-caption d-md-block">
+                    <p>Comprehensive <a href="notifications.html">Staff <i class="las la-external-link-alt"></i></a> Center</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img class="d-block" src="../SiteAssets/images/undraw_Preferences_re_49in.svg" alt="Settings"/>
+                  <div class="carousel-caption d-md-block">
+                    <p>Minimalist <a href="settings.html">Settings <i class="las la-external-link-alt"></i></a> Center</p>
+                  </div>
+                </div>
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                <i class="las la-chevron-circle-left"></i>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                <i class="las la-chevron-circle-right"></i>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer Section 
+    <footer>
+      <div class="page-footer text-center">
+        <div class="fixed-bottom shadow-sm">
+          <a href="https://covid19.who.int" target="_blank">
+            <img src="../SiteAssets/images/covid-19.svg" alt="COVID-19 Icon" width="30" height="30"/>
+            <span>View COVID-19 Info</span>
+          </a>
+        </div>
+      </div>
+    </footer>-->
+    
+ <!-- JavaScript for Add, Edit, Remove Functionalities -->
+<script>
+  $(document).ready(function() {
+    // Open IndexedDB
+    let db;
+    const request = indexedDB.open('HospitalDB', 1);
+
+    request.onupgradeneeded = function(event) {
+      db = event.target.result;
+      const objectStore = db.createObjectStore('patients', { keyPath: 'id' });
+    };
+
+    request.onsuccess = function(event) {
+      db = event.target.result;
+      renderCards();
+      renderTable();
+    };
+
+    request.onerror = function(event) {
+      console.error('IndexedDB error:', event.target.errorCode);
+    };
+
+    // Function to Save Patient to IndexedDB
+    function savePatient(patient) {
+      const transaction = db.transaction(['patients'], 'readwrite');
+      const objectStore = transaction.objectStore('patients');
+      objectStore.put(patient);
+      transaction.oncomplete = function() {
+        renderCards();
+        renderTable();
+      };
+    }
+
+    // Function to Delete Patient from IndexedDB
+    function deletePatient(id) {
+      const transaction = db.transaction(['patients'], 'readwrite');
+      const objectStore = transaction.objectStore('patients');
+      objectStore.delete(id);
+      transaction.oncomplete = function() {
+        renderCards();
+        renderTable();
+      };
+    }
+
+    // Function to Get All Patients from IndexedDB
+    function getAllPatients(callback) {
+      const transaction = db.transaction(['patients'], 'readonly');
+      const objectStore = transaction.objectStore('patients');
+      const request = objectStore.getAll();
+      request.onsuccess = function(event) {
+        callback(event.target.result);
+      };
+    }
+
+    // Function to Render Patients in Card View
+    function renderCards() {
+      getAllPatients(function(patients) {
+        const container = $('#patients-container');
+        container.empty();
+        patients.forEach(patient => {
+          const card = `
+            <div class="col-md-3">
+              <div class="card" data-patient-id="${patient.id}">
+                <div class="card-header">
+                  <div class="card-img-top">
+                    <img class="rounded-circle" src="../SiteAssets/images/people.svg" loading="lazy" alt="Patient Image"/>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="card-subsection-title">
+                    <h5>${patient.name}</h5>
+                    <p class="text-muted">Patient ID: ${patient.id}</p>
+                  </div>
+                  <div class="card-subsection-body">
+                    <label class="text-muted">Age</label>
+                    <p>${patient.age}</p>
+                    <label class="text-muted">Date of Birth</label>
+                    <p>${patient.dob}</p>
+                    <label class="text-muted">Diagnosis</label>
+                    <p>${capitalizeFirstLetter(patient.diagnosis)}</p>
+                    <label class="text-muted">Maladie</label>
+                    <p>${patient.maladie}</p>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-dark-blue-o edit-patient-btn" data-id="${patient.id}">Edit</button>
+                  <button class="btn btn-dark-red-f remove-patient-btn" data-id="${patient.id}">Remove</button>
+                </div>
+              </div>
+            </div>
+          `;
+          container.append(card);
+        });
+      });
+    }
+
+    // Function to Render Patients in Table View
+    function renderTable() {
+      getAllPatients(function(patients) {
+        const tbody = $('#patients-table-body');
+        tbody.empty();
+        patients.forEach(patient => {
+          const maladieClass = getMaladieClass(patient.maladie);
+          const row = `
+            <tr data-patient-id="${patient.id}">
+              <td>${patient.id}</td>
+              <td>
+                <img class="rounded-circle" src="../SiteAssets/images/people.svg" loading="lazy" alt="Patient Image"/>
+                <span class="ml-2">${patient.name}</span>
+              </td>
+              <td>${patient.age} yo</td>
+              <td>${patient.dob}</td>
+              <td>${capitalizeFirstLetter(patient.diagnosis)}</td>
+              <td>
+                <label class="${maladieClass}">${capitalizeFirstLetter(patient.maladie)}</label>
+              </td>
+              <td>
+                <button class="btn btn-dark-blue-o edit-patient-btn" data-id="${patient.id}">Edit</button>
+                <button class="btn btn-dark-red-f remove-patient-btn" data-id="${patient.id}">Remove</button>
+              </td>
+            </tr>
+          `;
+          tbody.append(row);
+        });
+      });
+    }
+
+    // Helper Function to Capitalize First Letter
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    // Function to Get Maladie Label Class
+    function getMaladieClass(maladie) {
+      switch(maladie.toLowerCase()) {
+        case 'diabète':
+          return 'label-orange';
+        case 'hypertension':
+          return 'label-green';
+        case 'asthme':
+          return 'label-blue';
+        case 'rhume':
+          return 'label-pink';
+        case 'grippe':
+          return 'label-grey';
+        case 'bronchite':
+          return 'label-orange';
+        case 'pneumonie':
+          return 'label-green';
+        case 'allergies':
+          return 'label-blue';
+        case 'migraine':
+          return 'label-pink';
+        case 'cancer':
+          return 'label-grey';
+        default:
+          return 'label-grey';
+      }
+    }
+
+    // Switch View Buttons
+    $('#card-view-btn').click(function() {
+      $('.patients-card-view').removeClass('no-display');
+      $('.patients-table-view').addClass('no-display');
+    });
+
+    $('#table-view-btn').click(function() {
+      $('.patients-card-view').addClass('no-display');
+      $('.patients-table-view').removeClass('no-display');
+    });
+
+    // Handle Add New Patient Button Click
+    $('#addPatientBtn').click(function() {
+      $('#patientModalLabel').text('Add New Patient');
+      $('#patientForm')[0].reset();
+      $('#patient-id').val('');
+      $('#patientModal').modal('show');
+    });
+
+    // Handle Edit Button Click
+    $(document).on('click', '.edit-patient-btn', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const patientId = parseInt($(this).data('id'));
+      if (!db) {
+        console.error('Database not initialized');
+        return;
+      }
+
+      try {
+        const transaction = db.transaction(['patients'], 'readonly');
+        const objectStore = transaction.objectStore('patients');
+        const request = objectStore.get(patientId);
+
+        request.onsuccess = function(event) {
+          const patient = event.target.result;
+          if (patient) {
+            $('#patientModalLabel').text('Edit Patient');
+            $('#patient-id').val(patient.id);
+            $('#patient-name').val(patient.name);
+            $('#patient-age').val(patient.age);
+            $('#patient-dob').val(patient.dob);
+            $('#patient-diagnosis').val(patient.diagnosis);
+            $('#patient-maladie').val(patient.maladie);
+            $('#patientModal').modal('show');
+          }
+        };
+
+        request.onerror = function(event) {
+          console.error('Error fetching patient:', event.target.error);
+        };
+      } catch (error) {
+        console.error('Transaction error:', error);
+      }
+    });
+
+    // Handle Remove Button Click
+    $(document).on('click', '.remove-patient-btn', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const patientId = parseInt($(this).data('id'));
+      if (!db) {
+        console.error('Database not initialized');
+        return;
+      }
+
+      try {
+        const transaction = db.transaction(['patients'], 'readonly');
+        const objectStore = transaction.objectStore('patients');
+        const request = objectStore.get(patientId);
+        
+        request.onsuccess = function(event) {
+          const patient = event.target.result;
+          if (patient && confirm(`Are you sure you want to remove patient ${patient.name}?`)) {
+            deletePatient(patientId);
+          }
+        };
+
+        request.onerror = function(event) {
+          console.error('Error fetching patient:', event.target.error);
+        };
+      } catch (error) {
+        console.error('Transaction error:', error);
+      }
+    });
+
+    // Handle Add/Edit Patient Form Submission
+    $('#patientForm').submit(function(e) {
+      e.preventDefault();
+      
+      const id = $('#patient-id').val();
+      const patient = {
+        id: id ? parseInt(id) : Date.now(),
+        name: $('#patient-name').val(),
+        age: parseInt($('#patient-age').val()),
+        dob: $('#patient-dob').val(),
+        diagnosis: $('#patient-diagnosis').val(),
+        maladie: $('#patient-maladie').val()
+      };
+
+      savePatient(patient);
+    $('#patientModal').modal('hide');
+  });
+});
+</script>
+
+    
+</body>
+</html>

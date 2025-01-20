@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="fr">
+ 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doclab - Prendre Rendez-vous</title>
+    <meta name="description" content="Réservez facilement vos rendez-vous médicaux avec nos 30 médecins experts répartis dans 15 départements réputés au Maroc.">
+    <meta name="keywords" content="rendez-vous, médecin, santé, Doclab, Maroc, réservation, spécialités médicales">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Embedded CSS -->
+    <style>
+        /* Reset et Styles de Base */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            --transition-1: all 0.3s ease;
+            --transition-2: all 0.2s ease;
+            --transition-3: all 0.5s ease;
+            --cubic-in: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+            --cubic-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --verdigris: #43BCCD;
+            --white: #ffffff;
+            --black: #000000;
+            --midnight-green: #004953;
+            --eerie-black: #1B1B1B;
+            --rich-black-fogra-29: #010C1D;
+            --white_a10: rgba(255, 255, 255, 0.1);
+            --white_a20: rgba(255, 255, 255, 0.2);
+            --radius-circle: 50%;
+            --radius-6: 6px;
+            --radius-12: 12px;
+            --shadow-1: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --fw-500: 500;
+            --fw-700: 700;
+            --ff-oswald: 'Oswald', sans-serif;
+        }
+
+        /*-----------------------------------*\
+          #PRELOADER
+        \*-----------------------------------*/
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--verdigris);
+            display: grid;
+            place-items: center;
+            z-index: 9999;
+            transition: var(--transition-1);
+        }
+
+        .preloader.loaded {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .preloader .circle {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--white);
+            border-radius: var(--radius-circle);
+            border-top-color: transparent;
+            animation: rotate360 1s linear infinite;
+        }
+
+        @keyframes rotate360 {
+            0% {
+                transform: rotate(0);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /*-----------------------------------*\
+          #APPOINTMENT FORM SECTION
+        \*-----------------------------------*/
+
+        .appointment-section {
+            padding: 120px 24px 60px;
+            background-color: #f4f4f4;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: var(--midnight-green);
+            position: relative;
+        }
+
+        .section-title::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 1px;
+            background-color: var(--midnight-green);
+        }
+
+        .appointment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: var(--radius-6);
+            box-shadow: var(--shadow-1);
+        }
+
+        .appointment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: var(--fw-500);
+            color: var(--midnight-green);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: var(--radius-6);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--verdigris);
+            outline: none;
+        }
+
+        .gender-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .gender-group input {
+            margin-right: 8px;
+        }
+
+        .submit-btn {
+            padding: 12px 20px;
+            background-color: var(--verdigris);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-6);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+            align-self: flex-start;
+        }
+
+        .submit-btn:hover,
+        .submit-btn:focus {
+            background-color: #0056b3;
+        }
+
+        /*-----------------------------------*\
+          #APPOINTMENTS LIST SECTION
+        \*-----------------------------------*/
+
+        .appointments-list {
+            margin-top: 60px;
+        }
+
+        .appointments-list h3 {
+            margin-bottom: 20px;
+            color: var(--midnight-green);
+            text-align: center;
+        }
+
+        .appointment-item {
+            border: 1px solid #ddd;
+            border-radius: var(--radius-6);
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: var(--shadow-2);
+        }
+
+        .appointment-item p {
+            margin-bottom: 8px;
+        }
+
+        .appointment-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .appointment-actions button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius-6);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .edit-btn:hover,
+        .edit-btn:focus {
+            background-color: #e0a800;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .delete-btn:hover,
+        .delete-btn:focus {
+            background-color: #c82333;
+        }
+
+        /*-----------------------------------*\
+          #FOOTER
+        \*-----------------------------------*/
+
+        .footer {
+            background-color: var(--midnight-green);
+            color: var(--white);
+            padding: 60px 24px;
+        }
+
+        .footer-top {
+            display: grid;
+            gap: 40px;
+        }
+
+        .footer-brand {
+            background-color: #43BCCD;
+            padding: 32px;
+            border-radius: var(--radius-6);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer .logo {
+            margin-bottom: 20px;
+        }
+
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .item-icon {
+            font-size: 2.5rem;
+            color: var(--verdigris);
+        }
+
+        .contact-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-link:hover,
+        .contact-link:focus {
+            color: var(--verdigris);
+        }
+
+        .footer-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-list-title {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: var(--fw-700);
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--white);
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover,
+        .footer-link:focus {
+            color: var(--verdigris);
+        }
+
+        .footer-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-field {
+            padding: 10px 20px;
+            border: 1px solid var(--white_a20);
+            border-radius: 4px;
+            font-size: 1rem;
+            color: var(--white);
+            background-color: transparent;
+        }
+
+        .input-field::placeholder {
+            color: #ccc;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: var(--verdigris);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            align-self: flex-start;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover,
+        .btn:focus {
+            background-color: #0056b3;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--white_a20);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        .footer-bottom .social-list {
+            display: flex;
+            gap: 8px;
+        }
+
+        .social-link {
+            font-size: 1.4rem;
+            padding: 12px;
+            background-color: var(--white_a10);
+            border-radius: var(--radius-circle);
+            color: var(--white);
+            transition: background-color 0.3s;
+        }
+
+        .social-link:hover,
+        .social-link:focus {
+            background-color: var(--verdigris);
+        }
+
+        /*-----------------------------------*\
+          #BACK TO TOP
+        \*-----------------------------------*/
+
+        .back-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--verdigris);
+            color: var(--white);
+            padding: 16px;
+            font-size: 2rem;
+            border-radius: var(--radius-circle);
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+
+        .back-top-btn.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-10px);
+        }
+
+        .back-top-btn:hover,
+        .back-top-btn:focus {
+            background-color: #0056b3;
+        }
+
+        /*-----------------------------------*\
+          #MEDIA QUERIES
+        \*-----------------------------------*/
+
+        /* Responsive pour les écrans plus larges que 992px */
+
+        @media (min-width: 992px) {
+            .container {
+                max-width: 940px;
+                margin: 0 auto;
+            }
+
+            .appointment-section {
+                padding: 140px 24px 80px;
+            }
+
+            .footer {
+                padding: 80px 24px;
+            }
+
+            .footer-top {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .footer-brand {
+                grid-column: 1 / 5;
+                padding: 28px 56px;
+                display: grid;
+                grid-template-columns: 0.3fr 1fr;
+                align-items: center;
+            }
+
+            .footer-list {
+                grid-column: auto;
+            }
+        }
+
+        /* Responsive pour les écrans plus larges que 1200px */
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .appointment-section {
+                padding: 160px 24px 100px;
+            }
+
+            .footer {
+                padding: 100px 24px;
+            }
+        }
+
+        /* Ajustements Responsives pour les Petits Écrans */
+
+        @media (max-width: 600px) {
+            .appointment-container {
+                padding: 20px;
+            }
+        }
+
+        /* Styles Supplémentaires pour l'Accessibilité */
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap; /* ligne ajoutée */
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Preloader -->
+    <div class="preloader" data-preloader>
+        <div class="circle"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main role="main">
+        <article>
+
+            <!-- Appointment Form Section -->
+            <section class="appointment-section" aria-labelledby="appointment-label">
+                <div class="container">
+
+                    <h2 class="section-title headline-md" id="appointment-label">Prendre Rendez-vous</h2>
+
+                    <div class="appointment-container">
+
+                        <form id="appointment-form" class="appointment-form" aria-label="Formulaire de prise de rendez-vous">
+                            
+                            <!-- Nom Complet -->
+                            <div class="form-group">
+                                <label for="name">Nom Complet<span aria-hidden="true">*</span></label>
+                                <input type="text" id="name" name="name" placeholder="Votre Nom" required>
+                            </div>
+
+                            <!-- Date de Naissance -->
+                            <div class="form-group">
+                                <label>Date de Naissance<span aria-hidden="true">*</span></label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="number" id="dob-day" name="dob-day" placeholder="JJ" min="1" max="31" required>
+                                    <input type="number" id="dob-month" name="dob-month" placeholder="MM" min="1" max="12" required>
+                                    <input type="number" id="dob-year" name="dob-year" placeholder="AAAA" min="1900" max="2100" required>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label for="email">Email<span aria-hidden="true">*</span></label>
+                                <input type="email" id="email" name="email" placeholder="Votre Email" required>
+                            </div>
+
+                            <!-- Contact -->
+                            <div class="form-group">
+                                <label for="contact">Numéro de Téléphone<span aria-hidden="true">*</span></label>
+                                <input type="tel" id="contact" name="contact" placeholder="+212 600 000 000" pattern="^\+?\d{10,15}$" required>
+                            </div>
+
+                            <!-- Médecin -->
+                            <div class="form-group">
+                                <label for="doctor">Médecin<span aria-hidden="true">*</span></label>
+                                <select id="doctor" name="doctor" required>
+                                    <option value="">Sélectionnez un médecin</option>
+                                    <!-- Groupes de Départements -->
+                                    <optgroup label="Cardiologie">
+                                        <option value="youssef-benali">Dr. Youssef Benali</option>
+                                        <option value="fatima-el-amrani">Dr. Fatima El Amrani</option>
+                                    </optgroup>
+                                    <optgroup label="Neurologie">
+                                        <option value="mohamed-chafik">Dr. Mohamed Chafik</option>
+                                        <option value="amina-zahraoui">Dr. Amina Zahraoui</option>
+                                    </optgroup>
+                                    <optgroup label="Dermatologie">
+                                        <option value="rachid-bennis">Dr. Rachid Bennis</option>
+                                        <option value="khadija-belkacem">Dr. Khadija Belkacem</option>
+                                    </optgroup>
+                                    <optgroup label="Pédiatrie">
+                                        <option value="abdelkader-moussini">Dr. Abdelkader Moussini</option>
+                                        <option value="salma-idrissi">Dr. Salma Idrissi</option>
+                                    </optgroup>
+                                    <optgroup label="Chirurgie Orthopédique">
+                                        <option value="hassan-ait-hamou">Dr. Hassan Ait Hamou</option>
+                                        <option value="laila-el-fassi">Dr. Laila El Fassi</option>
+                                    </optgroup>
+                                    <optgroup label="Gastro-entérologie">
+                                        <option value="soufiane-guerrouj">Dr. Soufiane Guerrouj</option>
+                                        <option value="samira-benjelloun">Dr. Samira Benjelloun</option>
+                                    </optgroup>
+                                    <optgroup label="Endocrinologie">
+                                        <option value="karim-boussakour">Dr. Karim Boussakour</option>
+                                        <option value="leila-saidi">Dr. Leila Saidi</option>
+                                    </optgroup>
+                                    <optgroup label="Oncologie">
+                                        <option value="mehdi-jaziri">Dr. Mehdi Jaziri</option>
+                                        <option value="nadia-abbou">Dr. Nadia Abbou</option>
+                                    </optgroup>
+                                    <optgroup label="Urologie">
+                                        <option value="anas-el-haddad">Dr. Anas El Haddad</option>
+                                        <option value="yasmina-loukili">Dr. Yasmina Loukili</option>
+                                    </optgroup>
+                                    <optgroup label="Rhumatologie">
+                                        <option value="nabil-boutaleb">Dr. Nabil Boutaleb</option>
+                                        <option value="asma-larbi">Dr. Asma Larbi</option>
+                                    </optgroup>
+                                    <optgroup label="Ophtalmologie">
+                                        <option value="imad-zahir">Dr. Imad Zahir</option>
+                                        <option value="hind-harfi">Dr. Hind Harfi</option>
+                                    </optgroup>
+                                    <optgroup label="Psychiatrie">
+                                        <option value="omar-el-ouazzani">Dr. Omar El Ouazzani</option>
+                                        <option value="jamila-harfi">Dr. Jamila Harfi</option>
+                                    </optgroup>
+                                    <optgroup label="Radiologie">
+                                        <option value="samir-drissi">Dr. Samir Drissi</option>
+                                        <option value="mariam-tahiri">Dr. Mariam Tahiri</option>
+                                    </optgroup>
+                                    <optgroup label="Gynécologie">
+                                        <option value="mounir-kabbaj">Dr. Mounir Kabbaj</option>
+                                        <option value="sarah-benchekroun">Dr. Sarah Benchekroun</option>
+                                    </optgroup>
+                                    <optgroup label="Pneumologie">
+                                        <option value="bilal-ziani">Dr. Bilal Ziani</option>
+                                        <option value="zineb-el-ouali">Dr. Zineb El Ouali</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <!-- Spécialité -->
+                            <div class="form-group">
+                                <label for="specialty">Spécialité<span aria-hidden="true">*</span></label>
+                                <input type="text" id="specialty" name="specialty" placeholder="Spécialité" readonly required>
+                            </div>
+
+                            <!-- Code de Référence -->
+                            <div class="form-group">
+                                <label for="reference">Code de Référence</label>
+                                <input type="text" id="reference" name="reference" placeholder="Code de Référence (optionnel)">
+                            </div>
+
+                            <!-- Adresse -->
+                            <div class="form-group">
+                                <label for="address">Adresse</label>
+                                <input type="text" id="address" name="address" placeholder="Votre Adresse (optionnel)">
+                            </div>
+
+                            <!-- Genre -->
+                            <div class="form-group">
+                                <label>Genre<span aria-hidden="true">*</span></label>
+                                <div class="gender-group">
+                                    <label>
+                                        <input type="radio" name="gender" value="Masculin" required>
+                                        Masculin
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="gender" value="Féminin" required>
+                                        Féminin
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Date du Rendez-vous -->
+                            <div class="form-group">
+                                <label for="appointment-date">Date du Rendez-vous<span aria-hidden="true">*</span></label>
+                                <input type="date" id="appointment-date" name="appointment-date" required>
+                            </div>
+
+                            <!-- Heure du Rendez-vous -->
+                            <div class="form-group">
+                                <label for="appointment-time">Heure du Rendez-vous<span aria-hidden="true">*</span></label>
+                                <input type="time" id="appointment-time" name="appointment-time" required>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="submit-btn">Confirmer le Rendez-vous</button>
+
+                        </form>
+
+                        <!-- Appointments List -->
+                        <div class="appointments-list" id="appointments">
+                            <h3>Vos Rendez-vous</h3>
+                            <!-- Les rendez-vous seront insérés dynamiquement ici -->
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" style="background-image: url('./assets/images/footer-bg.png')" id="footer" role="contentinfo">
+        <div class="container">
+
+            <div class="footer-top">
+
+                <div class="footer-brand" data-reveal="bottom">
+
+                    <a href="index.html" class="logo">
+                        <img src="./assets/images/logo.svg" width="136" height="46" loading="lazy" alt="Doclab Home">
+                    </a>
+
+                    <ul class="contact-list has-after">
+
+                        <li class="contact-item">
+
+                            <div class="item-icon">
+                                <ion-icon name="mail-open-outline"></ion-icon>
+                            </div>
+
+                            <div>
+                                <p>
+                                    Email Principal: <a href="mailto:contact@doclab.com" class="contact-link">contact@doclab.com</a>
+                                </p>
+
+                                <p>
+                                    Inquiries: <a href="mailto:info@doclab.com" class="contact-link">info@doclab.com</a>
+                                </p>
+                            </div>
+
+                        </li>
+
+                        <li class="contact-item">
+
+                            <div class="item-icon">
+                                <ion-icon name="call-outline"></ion-icon>
+                            </div>
+
+                            <div>
+                                <p>
+                                    Téléphone Bureau: <a href="tel:+0029129102320" class="contact-link">+00 2912 9102320</a>
+                                </p>
+
+                                <p>
+                                    Mobile: <a href="tel:+000232439493" class="contact-link">+000 2324 39493</a>
+                                </p>
+                            </div>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <ul class="footer-list" data-reveal="bottom">
+
+                    <li>
+                        <p class="headline-sm footer-list-title">Services</p>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Conditions</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Listing</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Fonctionnement</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Ce que Nous Offrons</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Dernières Nouvelles</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Contactez-Nous</a>
+                    </li>
+
+                </ul>
+
+                <ul class="footer-list" data-reveal="bottom">
+
+                    <li>
+                        <p class="headline-sm footer-list-title">Liens Utiles</p>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Politique de Confidentialité</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Conditions d'Utilisation</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Nos Services</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Rejoindre comme Médecin</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Ressources Patients</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Rencontrez l'Équipe</a>
+                    </li>
+
+                </ul>
+
+                <div class="footer-list" data-reveal="bottom">
+
+                    <p class="headline-sm footer-list-title">Abonnez-vous</p>
+
+                    <form action="" class="footer-form" aria-label="S'abonner à notre newsletter">
+                        <label for="newsletter-email" class="visually-hidden">Email</label>
+                        <input type="email" id="newsletter-email" name="email" placeholder="Votre Email" class="input-field title-lg" required>
+
+                        <button type="submit" class="btn has-before title-md">S'abonner</button>
+                    </form>
+
+                    <p class="text">
+                        Restez informé avec les dernières nouvelles et mises à jour de Doclab. Vous pouvez vous désabonner à tout moment.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+
+                <p class="text copyright">
+                    &copy; Doclab <span id="current-year"></span> 
+                </p>
+
+                <ul class="social-list">
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-facebook"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-twitter"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-google"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-linkedin"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-pinterest"></ion-icon>
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#top" class="back-top-btn" aria-label="Retour en Haut" data-back-top-btn>
+        <ion-icon name="chevron-up"></ion-icon>
+    </a></body></html>
+
+    <!-- Embedded JavaScript -->
+<script>
+        'use strict';
+
+        /**
+         * Utility Function: Add Event Listener to Multiple Elements
+         * Adds a specified event listener to each element in a NodeList.
+         *
+         * @param {NodeList} elements - The list of elements to attach the event listener to.
+         * @param {string} eventType - The type of event to listen for (e.g., 'click', 'keypress').
+         * @param {Function} callback - The function to execute when the event is triggered.
+         */
+        const addEventOnElements = function (elements, eventType, callback) {
+            for (let i = 0, len = elements.length; i < len; i++) {
+                elements[i].addEventListener(eventType, callback);
+            }
+        };
+
+        /**
+         * PRELOADER
+         * 
+         * The preloader remains visible until the entire page loads. Once loaded,
+         * it fades out, and a 'loaded' class is added to the body for any additional styling.
+         */
+        const preloader = document.querySelector("[data-preloader]");
+
+        window.addEventListener("load", function () {
+            if (preloader) {
+                preloader.classList.add("loaded");
+                document.body.classList.add("loaded");
+                console.log("Preloader caché, page complètement chargée.");
+            }
+        });
+
+        /**
+         * SCROLL REVEAL
+         * 
+         * Reveals elements with the [data-reveal] attribute as they enter the viewport.
+         */
+        const revealElements = document.querySelectorAll("[data-reveal]");
+
+        /**
+         * Checks if elements are in the viewport and adds/removes 'revealed' class accordingly.
+         */
+        const revealElementOnScroll = function () {
+            for (let i = 0, len = revealElements.length; i < len; i++) {
+                const elementTop = revealElements[i].getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                const revealPoint = windowHeight / 1.15;
+
+                if (elementTop < revealPoint) {
+                    revealElements[i].classList.add("revealed");
+                    console.log("Élément révélé :", revealElements[i]);
+                } else {
+                    revealElements[i].classList.remove("revealed");
+                    console.log("Élément masqué :", revealElements[i]);
+                }
+            }
+        };
+
+        window.addEventListener("scroll", revealElementOnScroll);
+        window.addEventListener("load", revealElementOnScroll);
+
+        /**
+         * UPDATE CURRENT YEAR
+         * 
+         * Automatically updates the current year in elements with the ID 'current-year'.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentYear = new Date().getFullYear();
+            const yearSpan = document.getElementById('current-year');
+            if (yearSpan) {
+                yearSpan.textContent = currentYear;
+                console.log("Année actuelle mise à jour :", currentYear);
+            }
+        });
+
+        /**
+         * BACK TO TOP BUTTON FUNCTIONALITY
+         * 
+         * Smoothly scrolls back to the top when the back-to-top button is clicked.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            const backTopBtn = document.querySelector('.back-top-btn');
+
+            if (backTopBtn) {
+                backTopBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    console.log("Bouton 'Retour en Haut' cliqué.");
+                });
+
+                // Afficher le bouton après avoir défilé de 300px
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backTopBtn.classList.add('active');
+                    } else {
+                        backTopBtn.classList.remove('active');
+                    }
+                });
+            }
+        });
+
+        /**
+         * APPOINTMENT MANAGEMENT USING INDEXEDDB
+         * 
+         * This section handles adding, viewing, editing, and deleting appointments.
+         * It uses IndexedDB for client-side storage.
+         */
+
+        // Only execute if the appointment-form exists (i.e., on appointment.html)
+        if (document.getElementById("appointment-form")) {
+            /**
+             * IndexedDB Configuration
+             */
+            const dbName = "AppointmentDB";
+            const storeName = "appointments";
+            let db;
+
+            // Open Database with version 2 (incrémentez la version si nécessaire)
+            const request = indexedDB.open(dbName, 2); // Version 2
+
+            request.onupgradeneeded = function (e) {
+                db = e.target.result;
+                if (!db.objectStoreNames.contains(storeName)) {
+                    const objectStore = db.createObjectStore(storeName, { keyPath: "id", autoIncrement: true });
+                    // Create indexes for searching
+                    objectStore.createIndex("appointmentDate", "appointmentDate", { unique: false });
+                    console.log(`Object store '${storeName}' créé avec l'index 'appointmentDate'.`);
+                } else {
+                    console.log(`Object store '${storeName}' existe déjà.`);
+                    // Vérifiez si l'index 'appointmentDate' existe, sinon, le créer
+                    const transaction = db.transaction(storeName, "readwrite");
+                    const store = transaction.objectStore(storeName);
+                    if (!store.indexNames.contains("appointmentDate")) {
+                        store.createIndex("appointmentDate", "appointmentDate", { unique: false });
+                        console.log("Index 'appointmentDate' ajouté à l'objet store.");
+                    }
+                }
+            };
+
+            request.onsuccess = function (e) {
+                db = e.target.result;
+                console.log(`Base de données '${dbName}' ouverte avec succès.`);
+                loadAppointments();
+                populateSpecialtyField();
+            };
+
+            request.onerror = function (e) {
+                console.error("Erreur lors de l'ouverture de la base de données :", e.target.error);
+                alert("Une erreur est survenue lors de l'ouverture de la base de données.");
+            };
+
+            /**
+             * Populate Specialty Field Based on Selected Doctor
+             */
+            const doctorSelect = document.getElementById("doctor");
+            const specialtyInput = document.getElementById("specialty");
+
+            const specialties = {
+                "youssef-benali": "Cardiologie",
+                "fatima-el-amrani": "Cardiologie",
+                "mohamed-chafik": "Neurologie",
+                "amina-zahraoui": "Neurologie",
+                "rachid-bennis": "Dermatologie",
+                "khadija-belkacem": "Dermatologie",
+                "abdelkader-moussini": "Pédiatrie",
+                "salma-idrissi": "Pédiatrie",
+                "hassan-ait-hamou": "Chirurgie Orthopédique",
+                "laila-el-fassi": "Chirurgie Orthopédique",
+                "soufiane-guerrouj": "Gastro-entérologie",
+                "samira-benjelloun": "Gastro-entérologie",
+                "karim-boussakour": "Endocrinologie",
+                "leila-saidi": "Endocrinologie",
+                "mehdi-jaziri": "Oncologie",
+                "nadia-abbou": "Oncologie",
+                "anas-el-haddad": "Urologie",
+                "yasmina-loukili": "Urologie",
+                "nabil-boutaleb": "Rhumatologie",
+                "asma-larbi": "Rhumatologie",
+                "imad-zahir": "Ophtalmologie",
+                "hind-harfi": "Ophtalmologie",
+                "omar-el-ouazzani": "Psychiatrie",
+                "jamila-harfi": "Psychiatrie",
+                "samir-drissi": "Radiologie",
+                "mariam-tahiri": "Radiologie",
+                "mounir-kabbaj": "Gynécologie",
+                "sarah-benchekroun": "Gynécologie",
+                "bilal-ziani": "Pneumologie",
+                "zineb-el-ouali": "Pneumologie"
+            };
+
+            // Update specialty field when doctor is selected
+            doctorSelect.addEventListener("change", function () {
+                const selectedDoctor = this.value;
+                specialtyInput.value = specialties[selectedDoctor] || "";
+                console.log(`Médecin sélectionné : ${selectedDoctor}, Spécialité : ${specialtyInput.value}`);
+            });
+
+            /**
+             * Populate Specialty Field on Page Load if URL Parameters Exist
+             */
+            function populateSpecialtyField() {
+                const params = new URLSearchParams(window.location.search);
+                const doctor = params.get("doctor");
+                const specialty = params.get("specialty");
+
+                if (doctor) {
+                    doctorSelect.value = doctor;
+                    specialtyInput.value = specialties[doctor] || specialty || "";
+                    console.log(`Formulaire pré-rempli avec le médecin : ${doctor}, Spécialité : ${specialtyInput.value}`);
+                }
+            }
+
+            /**
+             * Add Appointment
+             */
+            document.getElementById("appointment-form").addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const name = document.getElementById("name").value.trim();
+                const dobDay = document.getElementById("dob-day").value.trim();
+                const dobMonth = document.getElementById("dob-month").value.trim();
+                const dobYear = document.getElementById("dob-year").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const contact = document.getElementById("contact").value.trim();
+                const doctor = document.getElementById("doctor").value.trim();
+                const specialty = document.getElementById("specialty").value.trim();
+                const reference = document.getElementById("reference").value.trim();
+                const address = document.getElementById("address").value.trim();
+                const gender = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : "";
+                const appointmentDate = document.getElementById("appointment-date").value;
+                const appointmentTime = document.getElementById("appointment-time").value;
+
+                // Validation Basique
+                if (!name || !dobDay || !dobMonth || !dobYear || !email || !contact || !doctor || !specialty || !gender || !appointmentDate || !appointmentTime) {
+                    alert("Veuillez remplir tous les champs obligatoires.");
+                    return;
+                }
+
+                // Vérifier les doublons de rendez-vous
+                checkDuplicate(appointmentDate, appointmentTime).then(isDuplicate => {
+                    if (isDuplicate) {
+                        alert("Un rendez-vous existe déjà à cette date et heure.");
+                        return;
+                    }
+
+                    const transaction = db.transaction([storeName], "readwrite");
+                    const store = transaction.objectStore(storeName);
+                    const appointment = {
+                        name,
+                        dob: `${dobDay}/${dobMonth}/${dobYear}`,
+                        email,
+                        contact,
+                        doctor: doctor,
+                        specialty,
+                        reference,
+                        address,
+                        gender,
+                        appointmentDate,
+                        appointmentTime
+                    };
+
+                    store.add(appointment);
+
+                    transaction.oncomplete = function () {
+                        console.log("Rendez-vous ajouté :", appointment);
+                        document.getElementById("appointment-form").reset();
+                        specialtyInput.value = "";
+                        loadAppointments();
+                        alert("Rendez-vous ajouté avec succès.");
+                    };
+
+                    transaction.onerror = function (e) {
+                        console.error("Erreur lors de l'ajout du rendez-vous :", e.target.error);
+                        alert("Une erreur est survenue lors de l'ajout du rendez-vous.");
+                    };
+                }).catch(error => {
+                    console.error(error);
+                    alert("Une erreur est survenue lors de la vérification des rendez-vous.");
+                });
+            });
+
+            /**
+             * Check for Duplicate Appointments
+             */
+            function checkDuplicate(appointmentDate, appointmentTime) {
+                return new Promise((resolve, reject) => {
+                    const transaction = db.transaction([storeName], "readonly");
+                    const store = transaction.objectStore(storeName);
+
+                    // Vérifier si l'index existe
+                    if (!store.indexNames.contains("appointmentDate")) {
+                        console.error("L'index 'appointmentDate' n'existe pas dans l'objet store.");
+                        reject("L'index 'appointmentDate' est manquant.");
+                        return;
+                    }
+
+                    const index = store.index("appointmentDate");
+                    const request = index.getAll(IDBKeyRange.only(appointmentDate));
+
+                    request.onsuccess = function (e) {
+                        const appointments = e.target.result;
+                        console.log(`Rendez-vous trouvés pour la date ${appointmentDate}:`, appointments);
+                        const duplicate = appointments.some(app => app.appointmentTime === appointmentTime);
+                        if (duplicate) {
+                            console.log("Un rendez-vous existe déjà à cette date et heure.");
+                        } else {
+                            console.log("Aucun rendez-vous en double trouvé.");
+                        }
+                        resolve(duplicate);
+                    };
+
+                    request.onerror = function (e) {
+                        console.error("Erreur lors de la récupération des rendez-vous :", e.target.error);
+                        reject("Erreur lors de la vérification des doublons");
+                    };
+                });
+            }
+
+            /**
+             * Load Appointments
+             */
+            function loadAppointments() {
+                const appointmentsContainer = document.getElementById("appointments");
+                appointmentsContainer.innerHTML = "";
+
+                const transaction = db.transaction([storeName], "readonly");
+                const store = transaction.objectStore(storeName);
+
+                store.openCursor().onsuccess = function (e) {
+                    const cursor = e.target.result;
+                    if (cursor) {
+                        const appointment = cursor.value;
+                        console.log("Rendez-vous chargé :", appointment);
+                        const appointmentDiv = document.createElement("div");
+                        appointmentDiv.className = "appointment-item";
+                        appointmentDiv.innerHTML = `
+                            <p><strong>Nom :</strong> ${appointment.name}</p>
+                            <p><strong>Date de naissance :</strong> ${appointment.dob}</p>
+                            <p><strong>Email :</strong> ${appointment.email}</p>
+                            <p><strong>Contact :</strong> ${appointment.contact}</p>
+                            <p><strong>Médecin :</strong> ${appointment.doctor}</p>
+                            <p><strong>Spécialité :</strong> ${appointment.specialty}</p>
+                            <p><strong>Code de référence :</strong> ${appointment.reference || "N/A"}</p>
+                            <p><strong>Adresse :</strong> ${appointment.address || "N/A"}</p>
+                            <p><strong>Genre :</strong> ${appointment.gender}</p>
+                            <p><strong>Date du rendez-vous :</strong> ${appointment.appointmentDate}</p>
+                            <p><strong>Heure du rendez-vous :</strong> ${appointment.appointmentTime}</p>
+                            <div class="appointment-actions">
+                                <button class="edit-btn" onclick="editAppointment(${appointment.id})">Modifier</button>
+                                <button class="delete-btn" onclick="deleteAppointment(${appointment.id})">Supprimer</button>
+                            </div>
+                        `;
+                        appointmentsContainer.appendChild(appointmentDiv);
+                        cursor.continue();
+                    }
+                };
+
+                store.openCursor().onerror = function (e) {
+                    console.error("Erreur lors du chargement des rendez-vous :", e.target.error);
+                };
+            }
+
+            /**
+             * Delete Appointment
+             */
+            window.deleteAppointment = function(id) {
+                if (confirm("Êtes-vous sûr de vouloir supprimer ce rendez-vous?")) {
+                    const transaction = db.transaction([storeName], "readwrite");
+                    const store = transaction.objectStore(storeName);
+
+                    const request = store.delete(id);
+
+                    request.onsuccess = function() {
+                        console.log(`Rendez-vous avec ID ${id} supprimé.`);
+                        loadAppointments();
+                        alert("Rendez-vous supprimé avec succès.");
+                    };
+
+                    request.onerror = function(e) {
+                        console.error("Erreur lors de la suppression du rendez-vous :", e.target.error);
+                        alert("Une erreur est survenue lors de la suppression du rendez-vous.");
+                    };
+                }
+            };
+
+            /**
+             * Edit Appointment
+             */
+                 window.editAppointment = function(id) {
+        const transaction = db.transaction([storeName], "readwrite");
+        const store = transaction.objectStore(storeName);
+        const request = store.get(id);
+    
+        request.onsuccess = function(e) {
+            const appointment = e.target.result;
+            if (!appointment) {
+                console.error(`Aucun rendez-vous trouvé avec l'ID ${id}.`);
+                alert("Rendez-vous introuvable.");
+                return;
+            }
+    
+            // Fill form with appointment data
+            document.getElementById("name").value = appointment.name;
+            const [dobDay, dobMonth, dobYear] = appointment.dob.split("/");
+            document.getElementById("dob-day").value = dobDay;
+            document.getElementById("dob-month").value = dobMonth;
+            document.getElementById("dob-year").value = dobYear;
+            document.getElementById("email").value = appointment.email;
+            document.getElementById("contact").value = appointment.contact;
+            document.getElementById("doctor").value = appointment.doctor;
+            document.getElementById("specialty").value = appointment.specialty;
+            document.getElementById("reference").value = appointment.reference || "";
+            document.getElementById("address").value = appointment.address || "";
+            document.querySelector(`input[name="gender"][value="${appointment.gender}"]`).checked = true;
+            document.getElementById("appointment-date").value = appointment.appointmentDate;
+            document.getElementById("appointment-time").value = appointment.appointmentTime;
+    
+            // Modify the form submit handler for editing
+            const form = document.getElementById("appointment-form");
+            form.dataset.editId = id; // Store the ID being edited
+    
+            // Change submit button text
+            const submitBtn = form.querySelector('.submit-btn');
+            submitBtn.textContent = "Mettre à jour le Rendez-vous";
+    
+            // Modify form submit event for editing
+            form.onsubmit = function(e) {
+                e.preventDefault();
+    
+                const updatedAppointment = {
+                    id: parseInt(id), // Keep the same ID
+                    name: document.getElementById("name").value.trim(),
+                    dob: `${document.getElementById("dob-day").value}/${document.getElementById("dob-month").value}/${document.getElementById("dob-year").value}`,
+                    email: document.getElementById("email").value.trim(),
+                    contact: document.getElementById("contact").value.trim(),
+                    doctor: document.getElementById("doctor").value,
+                    specialty: document.getElementById("specialty").value,
+                    reference: document.getElementById("reference").value.trim(),
+                    address: document.getElementById("address").value.trim(),
+                    gender: document.querySelector('input[name="gender"]:checked').value,
+                    appointmentDate: document.getElementById("appointment-date").value,
+                    appointmentTime: document.getElementById("appointment-time").value
+                };
+    
+                // Update in database
+                const updateTransaction = db.transaction([storeName], "readwrite");
+                const updateStore = updateTransaction.objectStore(storeName);
+                const updateRequest = updateStore.put(updatedAppointment);
+    
+                updateRequest.onsuccess = function() {
+                    alert("Rendez-vous mis à jour avec succès!");
+                    form.reset();
+                    submitBtn.textContent = "Confirmer le Rendez-vous";
+                    delete form.dataset.editId;
+                    form.onsubmit = null; // Remove custom submit handler
+                    loadAppointments(); // Refresh the appointments list
+                };
+    
+                updateRequest.onerror = function() {
+                    console.error("Erreur lors de la mise à jour:", updateRequest.error);
+                    alert("Erreur lors de la mise à jour du rendez-vous.");
+                };
+            };
+        };
+    
+        request.onerror = function(e) {
+            console.error("Erreur lors de la récupération du rendez-vous:", e.target.error);
+            alert("Une erreur est survenue lors de la récupération du rendez-vous.");
+        };
+    };
+
+
+   
+
+
+// Get doctor from URL parameters and select them in the dropdown
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const selectedDoctor = params.get('doctor');
+    if (selectedDoctor) {
+        const doctorSelect = document.getElementById('doctor');
+        doctorSelect.value = selectedDoctor;
+        // Trigger change event to update specialty
+        doctorSelect.dispatchEvent(new Event('change'));
+    }
+});
+
+// Time slot management
+const timeSlots = {
+    morning: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30'],
+    afternoon: ['14:00', '14:30', '15:00', '15:30', '16:00', '16:30']
+};
+
+// Update available time slots
+async function updateAvailableTimeSlots(date, doctorId) {
+    const timeInput = document.getElementById('appointment-time');
+    timeInput.innerHTML = ''; // Clear existing options
+
+    // Get booked appointments for this date and doctor
+    const bookedSlots = await getBookedTimeSlots(date, doctorId);
+    
+    // Add available time slots
+    Object.values(timeSlots).flat().forEach(time => {
+        if (!bookedSlots.includes(time)) {
+            const option = document.createElement('option');
+            option.value = time;
+            option.textContent = time;
+            timeInput.appendChild(option);
+        }
+    });
+}
+
+// Get booked time slots from IndexedDB
+function getBookedTimeSlots(date, doctorId) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['appointments'], 'readonly');
+        const store = transaction.objectStore('appointments');
+        const request = store.index('appointmentDate').getAll(date);
+        
+        request.onsuccess = () => {
+            const appointments = request.result;
+            const bookedTimes = appointments
+                .filter(apt => apt.doctor === doctorId)
+                .map(apt => apt.appointmentTime);
+            resolve(bookedTimes);
+        };
+        
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// Update time slots when date or doctor changes
+document.getElementById('appointment-date').addEventListener('change', function() {
+    const doctorId = document.getElementById('doctor').value;
+    if (doctorId) {
+        updateAvailableTimeSlots(this.value, doctorId);
+    }
+});
+
+document.getElementById('doctor').addEventListener('change', function() {
+    const date = document.getElementById('appointment-date').value;
+    if (date) {
+        updateAvailableTimeSlots(date, this.value);
+    }
+});
+
+// Update edit functionality to also delete old appointment
+window.editAppointment = function(id) {
+    const transaction = db.transaction([storeName], "readonly");
+    const store = transaction.objectStore(storeName);
+    const request = store.get(id);
+
+    request.onsuccess = function(e) {
+        const appointment = e.target.result;
+        if (!appointment) {
+            console.error(`Aucun rendez-vous trouvé avec l'ID ${id}.`);
+            alert("Rendez-vous introuvable.");
+            return;
+        }
+
+        // Fill form with appointment data
+        document.getElementById("name").value = appointment.name;
+        const [dobDay, dobMonth, dobYear] = appointment.dob.split("/");
+        document.getElementById("dob-day").value = dobDay;
+        document.getElementById("dob-month").value = dobMonth;
+        document.getElementById("dob-year").value = dobYear;
+        document.getElementById("email").value = appointment.email;
+        document.getElementById("contact").value = appointment.contact;
+        document.getElementById("doctor").value = appointment.doctor;
+        document.getElementById("specialty").value = appointment.specialty;
+        document.getElementById("reference").value = appointment.reference || "";
+        document.getElementById("address").value = appointment.address || "";
+        document.querySelector(`input[name="gender"][value="${appointment.gender}"]`).checked = true;
+        document.getElementById("appointment-date").value = appointment.appointmentDate;
+        document.getElementById("appointment-time").value = appointment.appointmentTime;
+
+        // Delete old appointment
+        const deleteTransaction = db.transaction([storeName], "readwrite");
+        const deleteStore = deleteTransaction.objectStore(storeName);
+        deleteStore.delete(id);
+
+        console.log(`Ancien rendez-vous avec ID ${id} supprimé pour modification`);
+        alert("Modifiez les détails et soumettez le formulaire pour créer un nouveau rendez-vous");
+    };
+
+    request.onerror = function(e) {
+        console.error("Erreur lors de la récupération du rendez-vous :", e.target.error);
+        alert("Une erreur est survenue lors de la modification du rendez-vous.");
+    };
+};
+        };
+</script>
+ <!-- Ionicons -->
+ <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+ <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doclab - Nos Médecins</title>
+    <meta name="description" content="Découvrez notre équipe de 30 médecins expérimentés répartis dans 15 départements célèbres au Maroc et réservez facilement vos rendez-vous.">
+    <meta name="keywords" content="médecins, professionnels de santé, soins médicaux, spécialités, rendez-vous, Maroc">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/images/favicon.svg" type="image/svg+xml">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Embedded CSS -->
+    <style>
+        /* Reset and Base Styles */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            --transition-1: all 0.3s ease;
+            --transition-2: all 0.2s ease;
+            --transition-3: all 0.5s ease;
+            --cubic-in: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+            --cubic-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --verdigris: #43BCCD;
+            --white: #ffffff;
+            --black: #000000;
+            --midnight-green: #004953;
+            --eerie-black: #1B1B1B;
+            --rich-black-fogra-29: #010C1D;
+            --white_a10: rgba(255, 255, 255, 0.1);
+            --white_a20: rgba(255, 255, 255, 0.2);
+            --radius-circle: 50%;
+            --radius-6: 6px;
+            --radius-12: 12px;
+            --shadow-1: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --fw-500: 500;
+            --fw-700: 700;
+            --ff-oswald: 'Oswald', sans-serif;
+        }
+
+        /*-----------------------------------*\
+          #PRELOADER
+        \*-----------------------------------*/
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--verdigris);
+            display: grid;
+            place-items: center;
+            z-index: 9999;
+            transition: var(--transition-1);
+        }
+
+        .preloader.loaded {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .preloader .circle {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--white);
+            border-radius: var(--radius-circle);
+            border-block-start-color: transparent;
+            animation: rotate360 1s ease infinite;
+        }
+
+        @keyframes rotate360 {
+            0% {
+                transform: rotate(0);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /*-----------------------------------*\
+          #DOCTORS SECTION
+        \*-----------------------------------*/
+
+        .doctor-section {
+            padding: 120px 24px 60px; /* Adjusted padding */
+            background-color: #f4f4f4;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 2.5rem;
+            color: var(--midnight-green);
+            position: relative;
+        }
+
+        .section-title::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 1px;
+            background-color: var(--midnight-green);
+        }
+
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        /* Responsive Grid */
+        @media (max-width: 1024px) {
+            .doctors-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .doctors-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Flip Card Styles */
+        .doctor-card {
+            perspective: 1000px;
+            cursor: pointer;
+            height: 350px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .doctor-card.flip .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-front img {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--radius-circle);
+            margin-bottom: 1rem;
+            object-fit: cover;
+        }
+
+        .card-front h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            color: var(--midnight-green);
+        }
+
+        .card-front p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .available-times {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background-color: #f9f9f9;
+        }
+
+        .card-back h4 {
+            margin-bottom: 1rem;
+            color: var(--midnight-green);
+            font-size: 1.1rem;
+        }
+
+        .card-back button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--verdigris);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .card-back button:hover,
+        .card-back button:focus {
+            background-color: #0056b3;
+        }
+
+        /*-----------------------------------*\
+          #FOOTER
+        \*-----------------------------------*/
+
+        .footer {
+            background-color: var(--midnight-green);
+            color: var(--white);
+            padding: 60px 24px;
+        }
+
+        .footer-top {
+            display: grid;
+            gap: 40px;
+        }
+
+        .footer-brand {
+            background-color: #43BCCD; /* Example color, adjust as needed */
+            padding: 32px;
+            border-radius: var(--radius-6);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer .logo {
+            margin-bottom: 20px;
+        }
+
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .item-icon {
+            font-size: 2.5rem;
+            color: var(--verdigris);
+        }
+
+        .contact-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-link:hover,
+        .contact-link:focus {
+            color: var(--verdigris);
+        }
+
+        .footer-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-list-title {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: var(--fw-700);
+        }
+
+        .footer-link {
+            display: block;
+            color: var(--white);
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover,
+        .footer-link:focus {
+            color: var(--verdigris);
+        }
+
+        .footer-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-field {
+            padding: 10px 20px;
+            border: 1px solid var(--white_a20);
+            border-radius: 4px;
+            font-size: 1rem;
+            color: var(--white);
+            background-color: transparent;
+        }
+
+        .input-field::placeholder {
+            color: #ccc;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: var(--verdigris);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            align-self: flex-start;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover,
+        .btn:focus {
+            background-color: #0056b3;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--white_a20);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        .footer-bottom .social-list {
+            display: flex;
+            gap: 8px;
+        }
+
+        .social-link {
+            font-size: 1.4rem;
+            padding: 12px;
+            background-color: var(--white_a10);
+            border-radius: var(--radius-circle);
+            color: var(--white);
+            transition: background-color 0.3s;
+        }
+
+        .social-link:hover,
+        .social-link:focus {
+            background-color: var(--verdigris);
+        }
+
+        /*-----------------------------------*\
+          #BACK TO TOP
+        \*-----------------------------------*/
+
+        .back-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--verdigris);
+            color: var(--white);
+            padding: 16px;
+            font-size: 2rem;
+            border-radius: var(--radius-circle);
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+
+        .back-top-btn.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-10px);
+        }
+
+        .back-top-btn:hover,
+        .back-top-btn:focus {
+            background-color: #0056b3;
+        }
+
+        /*-----------------------------------*\
+          #MEDIA QUERIES
+        \*-----------------------------------*/
+
+        /* Responsive for screens larger than 992px */
+
+        @media (min-width: 992px) {
+            .container {
+                max-width: 940px;
+                margin: 0 auto;
+            }
+
+            .doctor-section {
+                padding: 140px 24px 80px;
+            }
+
+            .footer {
+                padding: 80px 24px;
+            }
+
+            .footer-top {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .footer-brand {
+                grid-column: 1 / 5;
+                padding: 28px 56px;
+                display: grid;
+                grid-template-columns: 0.3fr 1fr;
+                align-items: center;
+            }
+
+            .footer-list {
+                grid-column: auto;
+            }
+        }
+
+        /* Responsive for screens larger than 1200px */
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .doctor-section {
+                padding: 160px 24px 100px;
+            }
+
+            .footer {
+                padding: 100px 24px;
+            }
+        }
+
+        /* Additional Styling for Accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap; /* added line */
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Preloader -->
+    <div class="preloader" data-preloader>
+        <div class="circle"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main role="main">
+        <article>
+
+            <!-- Doctors Section -->
+            <section class="doctor-section" aria-labelledby="doctors-label">
+                <div class="container">
+
+                    <h2 class="section-title headline-md" id="doctors-label" data-reveal="bottom">Nos Médecins</h2>
+
+                    <div class="doctors-grid">
+
+                        <!-- Doctor 1 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Youssef Benali, Cardiologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Youssef Benali" loading="lazy">
+                                    <h3>Dr. Youssef Benali</h3>
+                                    <p>Cardiologue</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>9:00 AM - 5:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Youssef Benali">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 2 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Fatima El Amrani, Cardiologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Fatima El Amrani" loading="lazy">
+                                    <h3>Dr. Fatima El Amrani</h3>
+                                    <p>Cardiologue</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>10:00 AM - 6:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Fatima El Amrani">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 3 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Mohamed Chafik, Neurologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Mohamed Chafik" loading="lazy">
+                                    <h3>Dr. Mohamed Chafik</h3>
+                                    <p>Neurologue</p>
+                                    <p class="available-times">Mar, Jeu<br>10:00 AM - 4:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Mohamed Chafik">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 4 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Amina Zahraoui, Neurologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Amina Zahraoui" loading="lazy">
+                                    <h3>Dr. Amina Zahraoui</h3>
+                                    <p>Neurologue</p>
+                                    <p class="available-times">Mar, Jeu<br>11:00 AM - 5:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Amina Zahraoui">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 5 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Rachid Bennis, Dermatologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Rachid Bennis" loading="lazy">
+                                    <h3>Dr. Rachid Bennis</h3>
+                                    <p>Dermatologue</p>
+                                    <p class="available-times">Lun, Mar, Ven<br>8:00 AM - 3:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Rachid Bennis">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 6 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Khadija Belkacem, Dermatologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Khadija Belkacem" loading="lazy">
+                                    <h3>Dr. Khadija Belkacem</h3>
+                                    <p>Dermatologue</p>
+                                    <p class="available-times">Lun, Mar, Ven<br>9:30 AM - 5:30 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Khadija Belkacem">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 7 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Abdelkader Moussini, Pédiatre. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Abdelkader Moussini" loading="lazy">
+                                    <h3>Dr. Abdelkader Moussini</h3>
+                                    <p>Pédiatre</p>
+                                    <p class="available-times">Lun, Jeu<br>10:00 AM - 6:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Abdelkader Moussini">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 8 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Salma Idrissi, Pédiatre. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Salma Idrissi" loading="lazy">
+                                    <h3>Dr. Salma Idrissi</h3>
+                                    <p>Pédiatre</p>
+                                    <p class="available-times">Lun, Jeu<br>11:00 AM - 7:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Salma Idrissi">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 9 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Hassan Ait Hamou, Chirurgien Orthopédique. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Hassan Ait Hamou" loading="lazy">
+                                    <h3>Dr. Hassan Ait Hamou</h3>
+                                    <p>Chirurgien Orthopédique</p>
+                                    <p class="available-times">Lun, Jeu<br>8:00 AM - 3:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Hassan Ait Hamou">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 10 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Laila El Fassi, Chirurgien Orthopédique. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Laila El Fassi" loading="lazy">
+                                    <h3>Dr. Laila El Fassi</h3>
+                                    <p>Chirurgien Orthopédique</p>
+                                    <p class="available-times">Lun, Jeu<br>9:00 AM - 4:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Laila El Fassi">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 11 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Soufiane Guerrouj, Gastro-entérologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Soufiane Guerrouj" loading="lazy">
+                                    <h3>Dr. Soufiane Guerrouj</h3>
+                                    <p>Gastro-entérologue</p>
+                                    <p class="available-times">Mar, Ven<br>9:00 AM - 4:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Soufiane Guerrouj">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 12 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Samira Benjelloun, Gastro-entérologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Samira Benjelloun" loading="lazy">
+                                    <h3>Dr. Samira Benjelloun</h3>
+                                    <p>Gastro-entérologue</p>
+                                    <p class="available-times">Mar, Ven<br>10:00 AM - 5:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Samira Benjelloun">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 13 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Karim Boussakour, Endocrinologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Karim Boussakour" loading="lazy">
+                                    <h3>Dr. Karim Boussakour</h3>
+                                    <p>Endocrinologue</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>9:00 AM - 5:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Karim Boussakour">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 14 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Leila Saidi, Endocrinologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Leila Saidi" loading="lazy">
+                                    <h3>Dr. Leila Saidi</h3>
+                                    <p>Endocrinologue</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>10:30 AM - 6:30 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Leila Saidi">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 15 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Mehdi Jaziri, Oncologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Mehdi Jaziri" loading="lazy">
+                                    <h3>Dr. Mehdi Jaziri</h3>
+                                    <p>Oncologue</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>8:00 AM - 3:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Mehdi Jaziri">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 16 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Nadia Abbou, Oncologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Nadia Abbou" loading="lazy">
+                                    <h3>Dr. Nadia Abbou</h3>
+                                    <p>Oncologue</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>9:00 AM - 4:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Nadia Abbou">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 17 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Anas El Haddad, Urologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Anas El Haddad" loading="lazy">
+                                    <h3>Dr. Anas El Haddad</h3>
+                                    <p>Urologue</p>
+                                    <p class="available-times">Mar, Jeu<br>9:00 AM - 5:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Anas El Haddad">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 18 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Yasmina Loukili, Urologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Yasmina Loukili" loading="lazy">
+                                    <h3>Dr. Yasmina Loukili</h3>
+                                    <p>Urologue</p>
+                                    <p class="available-times">Mar, Jeu<br>10:00 AM - 6:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Yasmina Loukili">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 19 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Nabil Boutaleb, Rhumatologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Nabil Boutaleb" loading="lazy">
+                                    <h3>Dr. Nabil Boutaleb</h3>
+                                    <p>Rhumatologue</p>
+                                    <p class="available-times">Lun, Mer<br>8:30 AM - 3:30 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Nabil Boutaleb">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 20 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Asma Larbi, Rhumatologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Asma Larbi" loading="lazy">
+                                    <h3>Dr. Asma Larbi</h3>
+                                    <p>Rhumatologue</p>
+                                    <p class="available-times">Lun, Mer<br>9:00 AM - 4:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Asma Larbi">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 21 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Imad Zahir, Ophtalmologiste. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Imad Zahir" loading="lazy">
+                                    <h3>Dr. Imad Zahir</h3>
+                                    <p>Ophtalmologiste</p>
+                                    <p class="available-times">Mar, Ven<br>8:00 AM - 3:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Imad Zahir">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 22 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Hind Bouchareb, Ophtalmologiste. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Hind Bouchareb" loading="lazy">
+                                    <h3>Dr. Hind Bouchareb</h3>
+                                    <p>Ophtalmologiste</p>
+                                    <p class="available-times">Mar, Ven<br>9:30 AM - 5:30 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Hind Bouchareb">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 23 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Omar El Ouazzani, Psychiatre. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Omar El Ouazzani" loading="lazy">
+                                    <h3>Dr. Omar El Ouazzani</h3>
+                                    <p>Psychiatre</p>
+                                    <p class="available-times">Lun, Mer<br>9:00 AM - 5:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Omar El Ouazzani">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 24 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Jamila Harfi, Psychiatre. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Jamila Harfi" loading="lazy">
+                                    <h3>Dr. Jamila Harfi</h3>
+                                    <p>Psychiatre</p>
+                                    <p class="available-times">Lun, Mer<br>10:00 AM - 6:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Jamila Harfi">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 25 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Samir Drissi, Radiologiste. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Samir Drissi" loading="lazy">
+                                    <h3>Dr. Samir Drissi</h3>
+                                    <p>Radiologiste</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>8:00 AM - 3:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Samir Drissi">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 26 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Mariam Tahiri, Radiologiste. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Mariam Tahiri" loading="lazy">
+                                    <h3>Dr. Mariam Tahiri</h3>
+                                    <p>Radiologiste</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>9:00 AM - 4:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Mariam Tahiri">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 27 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Mounir Kabbaj, Gynécologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Mounir Kabbaj" loading="lazy">
+                                    <h3>Dr. Mounir Kabbaj</h3>
+                                    <p>Gynécologue</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>8:00 AM - 3:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Mounir Kabbaj">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 28 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Sarah Benchekroun, Gynécologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Sarah Benchekroun" loading="lazy">
+                                    <h3>Dr. Sarah Benchekroun</h3>
+                                    <p>Gynécologue</p>
+                                    <p class="available-times">Lun, Mer, Ven<br>9:00 AM - 5:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Sarah Benchekroun">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 29 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Bilal Ziani, Pneumologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr1.png" alt="Dr. Bilal Ziani" loading="lazy">
+                                    <h3>Dr. Bilal Ziani</h3>
+                                    <p>Pneumologue</p>
+                                    <p class="available-times">Mar, Jeu<br>8:00 AM - 3:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Bilal Ziani">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor 30 -->
+                        <div class="doctor-card" tabindex="0" aria-label="Dr. Zineb El Ouali, Pneumologue. Cliquez pour réserver un rendez-vous." aria-expanded="false">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img src="./assets/images/dr2.jpeg" alt="Dr. Zineb El Ouali" loading="lazy">
+                                    <h3>Dr. Zineb El Ouali</h3>
+                                    <p>Pneumologue</p>
+                                    <p class="available-times">Mar, Jeu<br>9:00 AM - 4:00 PM</p>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Réservez un Rendez-vous</h4>
+                                    <button aria-label="Prendre un rendez-vous avec Dr. Zineb El Ouali">Prendre Rendez-vous</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" style="background-image: url('./assets/images/footer-bg.png')" id="footer" role="contentinfo">
+        <div class="container">
+
+            <div class="footer-top">
+
+                <div class="footer-brand" data-reveal="bottom">
+
+                    <a href="index.html" class="logo">
+                        <img src="./assets/images/logo.svg" width="136" height="46" loading="lazy" alt="Doclab Home">
+                    </a>
+
+                    <ul class="contact-list has-after">
+
+                        <li class="contact-item">
+
+                            <div class="item-icon">
+                                <ion-icon name="mail-open-outline"></ion-icon>
+                            </div>
+
+                            <div>
+                                <p>
+                                    Email Principal: <a href="mailto:contact@doclab.com" class="contact-link">contact@doclab.com</a>
+                                </p>
+
+                                <p>
+                                    Inquiries: <a href="mailto:info@doclab.com" class="contact-link">info@doclab.com</a>
+                                </p>
+                            </div>
+
+                        </li>
+
+                        <li class="contact-item">
+
+                            <div class="item-icon">
+                                <ion-icon name="call-outline"></ion-icon>
+                            </div>
+
+                            <div>
+                                <p>
+                                    Téléphone Bureau: <a href="tel:+0029129102320" class="contact-link">+00 2912 9102320</a>
+                                </p>
+
+                                <p>
+                                    Mobile: <a href="tel:+000232439493" class="contact-link">+000 2324 39493</a>
+                                </p>
+                            </div>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div class="footer-list" data-reveal="bottom">
+
+                    <p class="headline-sm footer-list-title">À Propos de Nous</p>
+
+                    <p class="text">
+                        Doclab est dédié à fournir des services médicaux de premier ordre grâce à un réseau de professionnels de santé expérimentés. Notre mission est de rendre les soins de santé accessibles et efficaces pour tous.
+                    </p>
+
+                    <address class="address">
+                        <ion-icon name="map-outline"></ion-icon>
+
+                        <span class="text">
+                            2416 Boulevard de l'Érable <br>
+                            Casablanca, FR 20000
+                        </span>
+                    </address>
+
+                </div>
+
+                <ul class="footer-list" data-reveal="bottom">
+
+                    <li>
+                        <p class="headline-sm footer-list-title">Services</p>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Conditions</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Listing</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Fonctionnement</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Ce que Nous Offrons</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Dernières Nouvelles</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Contactez-Nous</a>
+                    </li>
+
+                </ul>
+
+                <ul class="footer-list" data-reveal="bottom">
+
+                    <li>
+                        <p class="headline-sm footer-list-title">Liens Utiles</p>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Politique de Confidentialité</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Conditions d'Utilisation</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Nos Services</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Rejoindre comme Médecin</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Ressources Patients</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="text footer-link">Rencontrez l'Équipe</a>
+                    </li>
+
+                </ul>
+
+                <div class="footer-list" data-reveal="bottom">
+
+                    <p class="headline-sm footer-list-title">Abonnez-vous</p>
+
+                    <form action="" class="footer-form" aria-label="S'abonner à notre newsletter">
+                        <label for="email" class="visually-hidden">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Votre Email" class="input-field title-lg" required>
+
+                        <button type="submit" class="btn has-before title-md">S'abonner</button>
+                    </form>
+
+                    <p class="text">
+                        Restez informé avec les dernières nouvelles et mises à jour de Doclab. Vous pouvez vous désabonner à tout moment.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+
+                <p class="text copyright">
+                    &copy; Doclab <span id="current-year"></span> | Tous Droits Réservés par CodeWithSadee
+                </p>
+
+                <ul class="social-list">
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-facebook"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-twitter"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-google"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-linkedin"></ion-icon>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="social-link" target="_blank" rel="noopener noreferrer">
+                            <ion-icon name="logo-pinterest"></ion-icon>
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#top" class="back-top-btn" aria-label="Retour en Haut" data-back-top-btn>
+        <ion-icon name="chevron-up"></ion-icon>
+    </a>
+
+    <!-- Embedded JavaScript -->
+    <script>
+      'use strict';
+
+/**
+ * Utility Function: Add Event Listener to Multiple Elements
+ */
+const addEventOnElements = function (elements, eventType, callback) {
+    for (let i = 0, len = elements.length; i < len; i++) {
+        elements[i].addEventListener(eventType, callback);
+    }
+};
+
+/**
+ * PRELOADER
+ */
+const preloader = document.querySelector("[data-preloader]");
+
+window.addEventListener("load", function () {
+    if (preloader) {
+        preloader.classList.add("loaded");
+        document.body.classList.add("loaded");
+    }
+});
+
+/**
+ * SCROLL REVEAL
+ */
+const revealElements = document.querySelectorAll("[data-reveal]");
+
+const revealElementOnScroll = function () {
+    for (let i = 0, len = revealElements.length; i < len; i++) {
+        const elementTop = revealElements[i].getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        const revealPoint = windowHeight / 1.15;
+
+        if (elementTop < revealPoint) {
+            revealElements[i].classList.add("revealed");
+        } else {
+            revealElements[i].classList.remove("revealed");
+        }
+    }
+};
+
+window.addEventListener("scroll", revealElementOnScroll);
+window.addEventListener("load", revealElementOnScroll);
+
+/**
+ * FLIP CARD FUNCTIONALITY
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const doctorCards = document.querySelectorAll('.doctor-card');
+
+    doctorCards.forEach(card => {
+        const cardInner = card.querySelector('.card-inner');
+        const bookButton = card.querySelector('.card-back button');
+
+        // Toggle flip on click
+        card.addEventListener('click', () => {
+            card.classList.toggle('flip');
+            const isFlipped = card.classList.contains('flip');
+            card.setAttribute('aria-expanded', isFlipped);
+        });
+
+        // Toggle flip on keypress (Enter or Space)
+        card.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                card.classList.toggle('flip');
+                const isFlipped = card.classList.contains('flip');
+                card.setAttribute('aria-expanded', isFlipped);
+            }
+        });
+
+        // Handle button click inside flipped card
+        if (bookButton) {
+            bookButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent triggering the card flip
+                const doctorName = card.querySelector('.card-front h3').textContent.trim();
+                const specialty = card.querySelector('.card-front p').textContent.trim();
+                // Redirect to appointment page with doctor's name and specialty as query parameters
+                window.location.href = `appointment.html?doctor=${encodeURIComponent(doctorName)}&specialty=${encodeURIComponent(specialty)}`;
+            });
+        }
+    });
+});
+
+/**
+ * BACK TO TOP BUTTON
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const backTopBtn = document.querySelector('.back-top-btn');
+
+    if (backTopBtn) {
+        backTopBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+});
+
+/**
+ * UPDATE CURRENT YEAR
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const currentYear = new Date().getFullYear();
+    const yearSpan = document.getElementById('current-year');
+    if (yearSpan) {
+        yearSpan.textContent = currentYear;
+    }
+});
+
+    </script>
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+</html>
