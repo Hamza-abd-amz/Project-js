@@ -42,7 +42,7 @@ request.onsuccess = function(event) {
         const password = document.getElementById('login-password').value;
 
         if (loginType === 'admin') {
-            const adminPassword = 'reda123'; // Mot de passe administrateur
+            const adminPassword = 'hamza123'; // Mot de passe administrateur
             if (password === adminPassword) {
                 window.location.href = 'hospital-admin-master/SitePages/dashboard.html'; // Redirection vers le tableau de bord
             } else {
